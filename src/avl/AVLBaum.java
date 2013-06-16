@@ -109,6 +109,16 @@ public class AVLBaum {
 		return neu;
 	}
 	
+	private Knoten doppelteRechtsRotation(Knoten k){
+		k.rechts = rechtsRotation(k.rechts);
+		return linksRotation(k);
+	}
+	
+	private Knoten doppelteLinksRotation(Knoten k){
+		k.links = linksRotation(k.links);
+		return rechtsRotation(k);
+	}
+	
 	private void balanciere(Knoten k){
 		k.balance = hoehe(k.rechts) - hoehe(k.links);
 	}
