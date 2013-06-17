@@ -3,6 +3,7 @@
 	<name>ad_aufgabe4</name>
 	<comment></comment>
 	<projects>
+		<project>GKAP_SoSe13</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

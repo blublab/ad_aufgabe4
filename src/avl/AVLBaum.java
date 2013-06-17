@@ -2,7 +2,7 @@ package avl;
 
 public class AVLBaum {
 	
-	private Knoten root = null;
+	public Knoten root = null;
 	
 	public AVLBaum(){}
 	
@@ -39,6 +39,7 @@ public class AVLBaum {
 	}
 	
 	private void checkBalance(Knoten k){
+		balanciere(k);
 		int balance = k.balance;
 		
 		assert(balance <= 2);
@@ -124,6 +125,8 @@ public class AVLBaum {
 	}
 	
 	private int hoehe(Knoten k){
+		if(k==null)
+			return -1;
 		if(k.rechts == null && k.links == null)
 			return 0;
 		else if(k.links == null)

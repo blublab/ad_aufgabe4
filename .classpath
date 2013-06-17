@@ -2,5 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GKAP_SoSe13"/>
+	<classpathentry kind="lib" path="/GKAP_SoSe13/lib/jgraph.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
