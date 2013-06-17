@@ -13,5 +13,9 @@ public class Knoten {
 		this.balance = 0;
 		this.parent = this.links = this.rechts = null;
 	}
+	
+	public String toString(){
+		return String.valueOf(value);
+	}
 
 }

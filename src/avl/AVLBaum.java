@@ -19,7 +19,7 @@ public class AVLBaum {
 		if(y.value < x.value){
 			if(x.links == null){
 				x.links = y;
-				y.parent =x;
+				y.parent = x;
 				
 				checkBalance(x);
 			}
