@@ -8,7 +8,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		int[] folge = Reader.getSequence("./Files/zzahlen.dat");
+		int[] folge = Reader.getSequence("./Files/zahlen1.dat");
 
 		AVLBaum avlbaum = new AVLBaum();
 		for (int n : folge) {
@@ -18,6 +18,9 @@ public class Main {
 		Graph<Knoten, DefaultWeightedEdge> g = tree2Graph(avlbaum);
 		Knoten root = avlbaum.root;
 
+		Visualizer.starte(g, root);
+		
+		avlbaum.remove(2);
 		Visualizer.starte(g, root);
 
 	}

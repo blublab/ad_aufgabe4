@@ -2,7 +2,7 @@ package avl;
 
 public class Knoten {
 
-	public final int value;
+	public int value;
 	public int balance;
 	public Knoten parent;
 	public Knoten links;
