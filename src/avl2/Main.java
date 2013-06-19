@@ -8,16 +8,36 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		int[] folge = Reader.getSequence("./Files/zzahlen.dat");
-
+		
+		/*
+		 * Zahlenfolge einlesen
+		 */
+		int[] folge = Reader.getSequence("./Files/zahlen2.dat");
+		
+		/*
+		 * AVL Baum erstellen und die Folge einfuegen
+		 */
 		AVLBaum avlbaum = new AVLBaum();
 		for (int n : folge) {
 			avlbaum.insert(n);
 		}
-
+		
+		/*
+		 * Ausgabe der Summe ueber alle Keys, Preorder, Postorder und direkt aus der Folge
+		 */
+		System.out.println("PreOrder Summe: " + avlbaum.preOrderSum());
+		System.out.println("PostOrder Summe: " + avlbaum.postOrderSum());
+		int summe = 0;
+		for(int i: folge){
+			summe += i;
+		}
+		System.out.println("Direkte Summe: " + summe);
+		
+		/*
+		 * Uberfuehrung des AVL Baums in einen Graphen und visuelle Ausgabe
+		 */
 		Graph<Knoten, DefaultWeightedEdge> g = tree2Graph(avlbaum);
 		Knoten root = avlbaum.root;
-
 		Visualizer.starte(g, root);
 		
 		//avlbaum.remove(2);
@@ -25,6 +45,9 @@ public class Main {
 
 	}
 
+	/**
+	 * Ueberfuehrt den Baum in einen gerichteten Graphen 
+	 */
 	private static Graph<Knoten, DefaultWeightedEdge> tree2Graph(AVLBaum tree) {
 		Graph<Knoten, DefaultWeightedEdge> g = new DirectedPseudograph<Knoten, DefaultWeightedEdge>(
 				DefaultWeightedEdge.class);
@@ -33,6 +56,7 @@ public class Main {
 		return g;
 	}
 
+	//Hilfsmethode fuer tree3Graph
 	private static void tree2GraphRek(Knoten k,
 			Graph<Knoten, DefaultWeightedEdge> g) {
 		if (k.links != null) {

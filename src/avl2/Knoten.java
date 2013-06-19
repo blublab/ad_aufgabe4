@@ -65,9 +65,9 @@ public class Knoten {
 		if ((links == null) && (rechts == null))
 			return value;
 		if (links == null)
-			return rechts.preOrderSum();
+			return value + rechts.preOrderSum();
 		if (rechts == null)
-			return rechts.preOrderSum();
+			return value + links.preOrderSum();
 		return value + links.preOrderSum() + rechts.preOrderSum();
 	}
 	
@@ -75,9 +75,9 @@ public class Knoten {
 		if ((links == null) && (rechts == null))
 			return value;
 		if (links == null)
-			return rechts.preOrderSum();
+			return rechts.postOrderSum() + value;
 		if (rechts == null)
-			return rechts.preOrderSum();
+			return links.postOrderSum() + value;
 		return links.preOrderSum() + rechts.preOrderSum() + value;
 	}
 
@@ -89,7 +89,7 @@ public class Knoten {
 			return rechts.hoehe();
 		}
 		if (rechts == null){
-			return links.hoehe();
+			return -links.hoehe();
 		}
 		return rechts.hoehe() - links.hoehe();
 	}
@@ -133,7 +133,6 @@ public class Knoten {
 		System.out.println("Linksrotation an Knoten: " + this);
 		
 		Knoten temp = new Knoten(this.value);
-
 		if (rechts != null)
 			temp.rechts = rechts.links;
 		temp.links 	= links;
