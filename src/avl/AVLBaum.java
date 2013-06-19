@@ -11,10 +11,6 @@ public class AVLBaum {
 		root = insert(root, n);
 	}
 	
-	public void remove(int n){
-		
-	}
-	
 	public int preOrderSum(Knoten k){
 		if ((k.links == null) && (k.rechts == null))
 			return k.value;
@@ -63,10 +59,151 @@ public class AVLBaum {
 		return k;
 	}
 	
-//	private Knoten remove(Knoten k, int n){
-//		
-//	}
+	public void remove(int number){
+		Knoten k = new Knoten(number);
+		root = (remove(root, k));
+		
+	}
+	
+	private Knoten remove(Knoten k, Knoten  deleteKnoten) {
+		if (k.equals( deleteKnoten)) {
+			Knoten  deleteKnotenLinks = k.links;
+			Knoten  deleteKnotenRechts = k.rechts;
+			
+			if ( deleteKnotenLinks == null &&  deleteKnotenRechts == null){
+				return null;
+			}
+			if ( deleteKnotenLinks != null &&  deleteKnotenRechts == null) {
+				return  deleteKnotenLinks;
+			}
+			if ( deleteKnotenLinks == null &&  deleteKnotenRechts != null) {
+				return  deleteKnotenRechts;
+			}
+			if ( deleteKnotenLinks != null &&  deleteKnotenRechts != null) {
+				if( hoehe(deleteKnotenLinks) <  hoehe(deleteKnotenRechts)){
+					k.rechts = (removeRekRechtsRum(k.rechts, k));
+				}else{
+					k.links = (removeRekLinksRum(k.links, k));
+				}
+				return k;
+			}
+		}
+		if (!k.equals( deleteKnoten)) {
+			if (k.value >  deleteKnoten.value) {
+				k.links = (remove(k.links,  deleteKnoten));
+			} else {
+				k.rechts = (remove(k.rechts,  deleteKnoten));
+			}
+		}
 
+		int leftHeight = k.links != null ? hoehe(k.links) : -1;
+		int rechtsHeight = k.rechts != null ? hoehe(k.rechts) : -1;
+
+		if (Math.abs(leftHeight - rechtsHeight) == 2) {
+			if (hoehe(k.links) - hoehe(k.rechts) == 2) {
+				if (hoehe(k.links.links) >= hoehe(k.links.rechts))
+					k = rechtsRotation(k);
+				else
+					k = doppelteLinksRotation(k);
+			} else if (hoehe(k.rechts) - hoehe(k.links) == 2) {
+				if (hoehe(k.rechts.rechts) >= hoehe(k.rechts.links))
+					k = linksRotation(k);
+				else
+					k = doppelteRechtsRotation(k);
+			}
+			return k;
+		} else {
+			k.resetHeight();
+		}
+		return k;
+	}
+	
+	private Knoten removeRekRechtsRum(Knoten k, Knoten  deleteKnoten) {
+		if (k.links==null) {
+			Knoten  deleteKnotenRechts = k.rechts;
+			
+			if ( deleteKnotenRechts == null){
+				 deleteKnoten.value = k.value;
+				return null;
+			}
+			if ( deleteKnotenRechts != null) {
+				 deleteKnoten.value = k.value;
+				return  deleteKnotenRechts;
+			}
+		}
+		if (k.links!=null) {
+				k.links = (removeRekRechtsRum(k.links,  deleteKnoten));
+		}
+
+		int leftHeight = k.links != null ? hoehe(k.links) : -1;
+		int rechtsHeight = k.rechts != null ? hoehe(k.rechts) : -1;
+
+		if (Math.abs(leftHeight - rechtsHeight) == 2) {
+			if (hoehe(k.links) - hoehe(k.rechts) == 2) {
+				if (hoehe(k.links.links) >= hoehe(k.links.rechts))
+					k = rechtsRotation(k);
+				else
+					k = doppelteLinksRotation(k);
+			} else if (hoehe(k.rechts) - hoehe(k.links) == 2) {
+				if (hoehe(k.rechts.rechts) >= hoehe(k.rechts.links))
+					k = linksRotation(k);
+				else
+					k = doppelteRechtsRotation(k);
+			}
+			return k;
+		} else {
+			k.resetHeight();
+		}
+		return k;
+	}
+	
+	private Knoten removeRekLinksRum(Knoten k, Knoten  deleteKnoten) {
+		if (k.rechts==null) {
+			Knoten  deleteKnotenLinks = k.links;
+			
+			if ( deleteKnotenLinks == null){
+				 deleteKnoten.value = k.value;
+				return null;
+			}
+			if ( deleteKnotenLinks != null) {
+				 deleteKnoten.value = k.value;
+				return  deleteKnotenLinks;
+			}
+		}
+		if (k.rechts!=null) {
+				k.rechts = (removeRekLinksRum(k.rechts,  deleteKnoten));
+		}
+
+		int leftHeight = k.links != null ? hoehe(k.links) : -1;
+		int rechtsHeight = k.rechts != null ? hoehe(k.rechts) : -1;
+
+		if (Math.abs(leftHeight - rechtsHeight) == 2) {
+			if (hoehe(k.links) - hoehe(k.rechts) == 2) {
+				if (hoehe(k.links.links) >= hoehe(k.links.rechts))
+					k = rechtsRotation(k);
+				else
+					k = doppelteLinksRotation(k);
+			} else if (hoehe(k.rechts) - hoehe(k.links) == 2) {
+				if (hoehe(k.rechts.rechts) >= hoehe(k.rechts.links))
+					k = linksRotation(k);
+				else
+					k = doppelteRechtsRotation(k);
+			}
+			return k;
+		} else {
+			k.resetHeight();
+		}
+		return k;
+	}
+
+	private Knoten getMaxKnotenInLeftTreeSide(Knoten k) {
+		if (k.rechts == null) {
+			return k;
+		} else {
+			return getMaxKnotenInLeftTreeSide(k.rechts);
+		}
+	}
+	
 	private static Knoten rechtsRotation(Knoten k) {
 		System.out.println("Rechtsrotation an Knoten: " + k);
 		Knoten neu = k.links;

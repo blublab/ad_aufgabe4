@@ -17,4 +17,7 @@ public class Knoten {
 		return String.valueOf(value);
 	}
 
+	public void resetHeight(){
+		hoehe = 0;
+	}
 }
