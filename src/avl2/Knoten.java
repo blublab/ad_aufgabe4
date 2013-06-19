@@ -37,6 +37,27 @@ public class Knoten {
 		balanceOut();
 	}
 	
+	public int preOrderSum(){
+		if ((links == null) && (rechts == null))
+			return value;
+		if (links == null)
+			return rechts.preOrderSum();
+		if (rechts == null)
+			return rechts.preOrderSum();
+		return value + links.preOrderSum() + rechts.preOrderSum();
+	}
+	
+	public int postOrderSum(){
+		if ((links == null) && (rechts == null))
+			return value;
+		if (links == null)
+			return rechts.preOrderSum();
+		if (rechts == null)
+			return rechts.preOrderSum();
+		return links.preOrderSum() + rechts.preOrderSum() + value;
+	}
+
+	
 	private int balance(){
 		if ((links == null) && (rechts == null))
 			return 0;
