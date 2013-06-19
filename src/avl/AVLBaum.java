@@ -8,203 +8,111 @@ public class AVLBaum {
 	}
 
 	public void insert(int n) {
-		Knoten k = new Knoten(n);
-		if (root == null) {
-			root = k;
-		} else
-			insertRek(root, k);
+		root = insert(root, n);
+	}
+	
+	public void remove(int n){
+		
+	}
+	
+	public int preOrderSum(Knoten k){
+		if ((k.links == null) && (k.rechts == null))
+			return k.value;
+		if (k.links == null)
+			return k.value + preOrderSum(k.rechts);
+		if (k.rechts == null)
+			return k.value + preOrderSum(k.links);
+		return k.value + preOrderSum(k.links) + preOrderSum(k.rechts);
+	}
+	
+	public int postOrderSum(Knoten k){
+		if ((k.links == null) && (k.rechts == null))
+			return k.value;
+		if (k.links == null)
+			return k.value + postOrderSum(k.rechts);
+		if (k.rechts == null)
+			return k.value + postOrderSum(k.links);
+		return postOrderSum(k.links) + postOrderSum(k.rechts) + k.value;
 	}
 
-	private void insertRek(Knoten x, Knoten y) {
-		if (y.value < x.value) {
-			if (x.links == null) {
-				x.links = y;
-				y.parent = x;
-
-				checkBalance(x);
-			} else
-				insertRek(x.links, y);
-		} else if (y.value > x.value) {
-			if (x.rechts == null) {
-				x.rechts = y;
-				y.parent = x;
-
-				checkBalance(x);
-			} else
-				insertRek(x.rechts, y);
+	private Knoten insert(Knoten k, int n) {
+		if (k == null) {
+			return new Knoten(n);
 		}
-	}
-
-	private void checkBalance(Knoten k) {
-		balanciere(k);
-		int balance = k.balance;
-
-		assert (balance <= 2);
-		assert (balance >= -2);
-
-		if (balance == -2) {
-			if (hoehe(k.links.links) >= hoehe(k.links.rechts))
-				k = rechtsRotation(k);
-			else
-				k = doppelteLinksRotation(k);
-		} else if (balance == 2) {
-			if (hoehe(k.rechts.rechts) >= hoehe(k.rechts.links))
-				k = linksRotation(k);
-			else
-				k = doppelteRechtsRotation(k);
+		if (n < k.value) {
+			k.links = insert(k.links, n);
+			System.out.println(n + " nach " + k + " links eingefuegt");
+			if (hoehe(k.links) - hoehe(k.rechts) == 2) {
+				if (hoehe(k.links.links) >= hoehe(k.links.rechts))
+					k = rechtsRotation(k);
+				else
+					k = doppelteLinksRotation(k);
+			}
 		}
-
-		if (k.parent != null) // pruefen, ob wir nicht an wurzel sind
-			checkBalance(k.parent);
-		else
-			root = k;
+		else if (n >= k.value) {
+			k.rechts = insert(k.rechts, n);
+			System.out.println(n + " nach " + k + " rechts eingefuegt");
+			if (hoehe(k.rechts) - hoehe(k.links) == 2) {
+				if (hoehe(k.rechts.rechts) >= hoehe(k.rechts.links))
+					k = linksRotation(k);
+				else
+					k = doppelteRechtsRotation(k);
+			}
+		}
+		k.hoehe = max(hoehe(k.links), hoehe(k.rechts)) + 1;
+		return k;
 	}
+	
+//	private Knoten remove(Knoten k, int n){
+//		
+//	}
 
-	private Knoten rechtsRotation(Knoten k) {
+	private static Knoten rechtsRotation(Knoten k) {
+		System.out.println("Rechtsrotation an Knoten: " + k);
 		Knoten neu = k.links;
-		neu.parent = k.parent;
-		k.links = neu.rechts;
-
-		// falls neuer linker knoten des zu balancierenden knotens nicht leer
-		// ist, parent setzen
-		if (k.links != null)
-			k.links.parent = k;
-
+		k.links = k.links.rechts;
 		neu.rechts = k;
-		k.parent = neu;
+		k.hoehe = max(hoehe(k.rechts), hoehe(k.links)) + 1;
+		neu.hoehe = max(hoehe(neu.rechts), hoehe(neu.links)) + 1;
 
-		if (neu.parent != null) {
-			if (neu.parent.rechts == k)
-				neu.parent.rechts = neu;
-			else
-				neu.parent.links = neu;
-		}
-		balanciere(k);
-		balanciere(neu);
 		return neu;
 	}
 
-	private Knoten linksRotation(Knoten k) {
+	private static Knoten linksRotation(Knoten k) {
+		System.out.println("Linksrotation an Knoten: " + k);
 		Knoten neu = k.rechts;
-		neu.parent = k.parent;
-		k.rechts = neu.links;
-
-		// falls neuer rechter knoten des zu balancierenden knotens nicht leer
-		// ist, parent setzen
-		if (k.rechts != null)
-			k.rechts.parent = k;
-
+		k.rechts = k.rechts.links;
 		neu.links = k;
-		k.parent = neu;
+		k.hoehe = max(hoehe(k.rechts), hoehe(k.links)) + 1;
+		neu.hoehe = max(hoehe(neu.rechts), hoehe(neu.links)) + 1;
 
-		if (neu.parent != null) {
-			if (neu.parent.rechts == k)
-				neu.parent.rechts = neu;
-			else
-				neu.parent.links = neu;
-		}
-		balanciere(k);
-		balanciere(neu);
 		return neu;
 	}
 
-	private Knoten doppelteRechtsRotation(Knoten k) {
+	private static Knoten doppelteRechtsRotation(Knoten k) {
+		System.out.println("Doppelterechtsrotation an Knoten: " + k);
 		k.rechts = rechtsRotation(k.rechts);
 		return linksRotation(k);
 	}
 
-	private Knoten doppelteLinksRotation(Knoten k) {
+	private static Knoten doppelteLinksRotation(Knoten k) {
+		System.out.println("Doppeltelinksrotation an Knoten: " + k);
 		k.links = linksRotation(k.links);
 		return rechtsRotation(k);
 	}
 
-	private void balanciere(Knoten k) {
-		k.balance = hoehe(k.rechts) - hoehe(k.links);
-	}
-
-	private int hoehe(Knoten k) {
+	private static int hoehe(Knoten k) {
 		if (k == null)
 			return -1;
-		if (k.rechts == null && k.links == null)
-			return 0;
-		else if (k.links == null)
-			return 1 + hoehe(k.rechts);
-		else if (k.rechts == null)
-			return 1 + hoehe(k.links);
 		else
-			return 1 + max(hoehe(k.links), hoehe(k.rechts));
+			return k.hoehe;
 	}
 
-	private int max(int a, int b) {
+	private static int max(int a, int b) {
 		if (a >= b)
 			return a;
 		else
 			return b;
-	}
-
-	public void remove(int n) {
-		removeRek(root, n);
-	}
-
-	private void removeRek(Knoten x, int n) {
-		if (x != null) {
-			if (x.value > n)
-				removeRek(x.links, n);
-			else if (x.value < n)
-				removeRek(x.rechts, n);
-			else if (x.value == n)
-				removeFound(x);
-		}
-	}
-
-	private void removeFound(Knoten x) {		
-		if(x.parent == null){
-			Knoten nachfolger = nachfolger(x);
-			Knoten temp = nachfolger;
-			if(nachfolger.rechts == null){
-				if(nachfolger.links != null){
-					nachfolger.links.parent = nachfolger.parent;
-					nachfolger.parent = null;
-				}
-			}
-			else if(nachfolger.links == null){
-				if(nachfolger.rechts != null){
-					nachfolger.rechts.parent = nachfolger.parent;
-					nachfolger.parent = null;
-				}
-			}
-			nachfolger.links = x.links;
-			nachfolger.rechts = x.rechts;
-			x.links.parent = nachfolger;
-			x.rechts.parent = nachfolger;
-			removeFound(temp);
-			checkBalance(nachfolger);
-		}
-		else if(x.rechts == null && x.links == null){
-			Knoten parent = x.parent;
-			if(parent.links == x)
-				parent.links = null;
-			else
-				parent.rechts = null;
-			checkBalance(parent);
-		} 
-	}
-
-	private Knoten nachfolger(Knoten k) {
-		if (k.rechts != null) {
-			Knoten r = k.rechts;
-			while (r.links != null) {
-				r = r.links;
-			}
-			return r;
-		} else {
-			Knoten l = k.parent;
-			while (l != null && k == l.rechts) {
-				k = l;
-				l = k.parent;
-			}
-			return l;
-		}
 	}
 	
 }

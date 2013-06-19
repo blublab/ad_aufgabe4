@@ -8,7 +8,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		int[] folge = Reader.getSequence("./Files/zahlen1.dat");
+		int[] folge = Reader.getSequence("./Files/zzahlen.dat");
 
 		AVLBaum avlbaum = new AVLBaum();
 		for (int n : folge) {
