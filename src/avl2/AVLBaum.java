@@ -14,8 +14,8 @@ public class AVLBaum {
 			root = new Knoten(i);
 	}
 	
-	public void delete(int i){
-		root.delete(i);
+	public void remove(int i){
+		root.remove(i);
 	}
 	
 	public int preOrderSum(){

@@ -7,7 +7,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedPseudograph;
 
 public class Main {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		/*
 		 * Zahlenfolge einlesen
@@ -25,6 +25,7 @@ public class Main {
 		/*
 		 * Ausgabe der Summe ueber alle Keys, Preorder, Postorder und direkt aus der Folge
 		 */
+		System.out.println("====Summe ueber alle Knoten====");
 		System.out.println("PreOrder Summe: " + avlbaum.preOrderSum());
 		System.out.println("PostOrder Summe: " + avlbaum.postOrderSum());
 		int summe = 0;
@@ -36,13 +37,24 @@ public class Main {
 		/*
 		 * Uberfuehrung des AVL Baums in einen Graphen und visuelle Ausgabe
 		 */
-		Graph<Knoten, DefaultWeightedEdge> g = tree2Graph(avlbaum);
 		Knoten root = avlbaum.root;
-		Visualizer.starte(g, root);
+		int toRemove1 = 3;
+		int toRemove2 = 14;
+		int toRemove3 = 5;
+		System.out.println("==== Entferne "+ toRemove1 +", "+ toRemove2 +" und "+ toRemove3 +" ====");
+		avlbaum.remove(toRemove1);
+		avlbaum.remove(toRemove2);
+		avlbaum.remove(toRemove3);
 		
-		//avlbaum.remove(2);
-		//Visualizer.starte(g, root);
+		System.out.println("==== Summe nach Entfernen von "+ toRemove1 +", "+ toRemove2 +" und "
+		+ toRemove3 +" ="+(toRemove1+toRemove2+toRemove3)+" ===");
 
+		System.out.println(avlbaum.postOrderSum());
+		
+		System.out.println("erwartete summe: " + (summe-(toRemove1+toRemove2+toRemove3)));
+		
+		Graph<Knoten, DefaultWeightedEdge> g1 = tree2Graph(avlbaum);
+		Visualizer.starte(g1, root);
 	}
 
 	/**
